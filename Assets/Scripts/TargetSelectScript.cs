@@ -8,7 +8,9 @@ public class TargetSelectScript : MonoBehaviour {
 
     private void OnMouseDown()
     {
-        BC.CastSkillOnTarget(BC.Party[BC.TurnIndex], transform.parent.GetComponent<Character>());
+        BC.CastSkillOnTarget(BC.Party[BC.TurnIndex], GetComponent<Character>());
+        Destroy(GetComponent<ShowStatusOnHover>().CurrStatWindow);
+        GetComponent<ShowStatusOnHover>().SetStatusWindow();
         BC.NextTurn();
     }
 

@@ -28,10 +28,12 @@ public class Skill {
         }
         for (int i = 0; i < debuffs.Count; i++)
         {
+            debuffs[i].InflictingSkillName = n;
             DebuffList.Add(debuffs[i]);
         }
         for (int i = 0; i < buffs.Count; i++)
         {
+            buffs[i].InflictingSkillName = n;
             BuffList.Add(buffs[i]);
         }
         levelReq = lr;
@@ -80,8 +82,9 @@ public class Skill {
         {
             Status newStatus = new Status(S);
             newStatus.Attacker = user;
+            newStatus.InflictingSkillName = Name;
             newStatus.SetAction();
-            if (!hasStatusSameSkillandAttacker(newStatus, user))
+            if (!hasStatusOfSameSkill(newStatus, user))
             {
                 
                 user.Statuses.Add(newStatus);
@@ -92,7 +95,8 @@ public class Skill {
         {
             Status newStatus = new Status(S);
             newStatus.Attacker = user;
-            if (!hasStatusSameSkillandAttacker(newStatus, target))
+            newStatus.InflictingSkillName = Name;
+            if (!hasStatusOfSameSkill(newStatus, target))
             {
                 target.Statuses.Add(newStatus);
             }
@@ -102,11 +106,11 @@ public class Skill {
         //MonoBehaviour.print(user.name+" uses "+Name+" on "+ reciever.name + " dealing " +Dmg);
     }
 
-    bool hasStatusSameSkillandAttacker(Status S, Character C)
+    public bool hasStatusOfSameSkill(Status S, Character C)
     {
         foreach(Status stat in C.Statuses)
         {
-            if(stat.ID==S.ID && stat.Attacker.name.Equals(S.Attacker.name))
+            if(stat.ID==S.ID && stat.InflictingSkillName.Equals(S.InflictingSkillName))
             {
                 return true;
             }
@@ -244,7 +248,11 @@ public class Skill {
                 Debuffs.Add(Status.StatusByID(16));
                 Skill Avalanche = new Skill("Avalance", "Reduce their stamina", 55, costs, Debuffs, Buffs, 2, 0);
                 return Avalanche;
-
+            case 24:
+                costs = new int[4] { 0, 0, 14, 0 };
+                Buffs.Add(Status.StatusByID(17));
+                Skill Preparation = new Skill("Preparation", "Increase base damage", 0, costs, Debuffs, Buffs, 3, 1);
+                return Preparation;
             default:
                 costs = new int[4] { 1, 0, 0, 0 };
                 Skill wait = new Skill("Wait", "waits", 0, costs, Debuffs, Buffs, 0, 1);

@@ -16,10 +16,9 @@ public class BattleControl : MonoBehaviour {
     public GameObject UI_Window;
     public GameObject CurrentUI_Canvas;
     public GameObject SkillButton;
-    public GameObject TargetBox;
-    public List<GameObject> TargetBoxes=new List<GameObject> { };
     public GameObject CurrentPortrait;
-
+    public int DisplaySkillIndex;
+    public List<GameObject> CurrentSkillButtons = new List<GameObject> { };
     public GameObject UI_Status_Window;
     
     void HandleBattle()
@@ -34,6 +33,54 @@ public class BattleControl : MonoBehaviour {
 
     void DisplayCurrentSkills()
     {
+        foreach (GameObject g in CurrentSkillButtons)
+            Destroy(g);
+        CurrentSkillButtons.Clear();
+        int value= Party[TurnIndex].SkillSet.Count;
+        if (DisplaySkillIndex + 6 < Party[TurnIndex].SkillSet.Count)
+        {
+            value = DisplaySkillIndex + 6;
+        }
+
+        for (int i = DisplaySkillIndex; i < value; i++)
+            {
+                GameObject go = Instantiate(SkillButton, CurrentUI_Canvas.transform.GetChild(i-DisplaySkillIndex).position, Quaternion.identity, CurrentUI_Canvas.transform) as GameObject;
+                go.transform.GetChild(0).GetComponent<Text>().text = Party[TurnIndex].SkillSet[i].Name;
+                for (int j = 0; j < 4; j++)
+                {
+                    go.transform.GetChild(1 + j).GetComponent<Text>().text = Party[TurnIndex].SkillSet[i].Costs[j].ToString();
+                }
+                int t = i;
+                go.GetComponent<Button>().onClick.AddListener(delegate { SelectSkill(t); });
+                go.GetComponent<Button>().interactable = checkCost(Party[TurnIndex], Party[TurnIndex].SkillSet[i]);
+            CurrentSkillButtons.Add(go);
+
+            }
+        
+    }
+
+    void DisplayNextSkillPage()
+    {
+        if (DisplaySkillIndex + 6 < Party[TurnIndex].SkillSet.Count)
+        {
+            DisplaySkillIndex += 6;
+            DisplayCurrentSkills();
+        }
+        
+    }
+
+    void DisplayPrevSkillPage()
+    {
+        if (DisplaySkillIndex - 6 >= 0)
+        {
+            DisplaySkillIndex -= 6;
+            DisplayCurrentSkills();
+        }
+
+    }
+
+    void SetUpPortrait()
+    {
         CurrentPortrait.GetComponent<SpriteRenderer>().sprite = Party[TurnIndex].Portrait;
         for (int i = 0; i < 4; i++)
         {
@@ -41,19 +88,6 @@ public class BattleControl : MonoBehaviour {
             CurrentPortrait.transform.GetChild(0).GetChild(i).GetChild(1).GetComponent<Text>().text = Party[TurnIndex].Regen[i].ToString();
         }
         CurrentPortrait.transform.GetChild(0).GetChild(4).GetChild(0).GetComponent<Text>().text = Party[TurnIndex].health.ToString() + "/" + Party[TurnIndex].MaxHealth.ToString();
-        for (int i = 0; i < Party[TurnIndex].SkillSet.Count; i++)
-        {
-            GameObject go=Instantiate(SkillButton,CurrentUI_Canvas.transform.GetChild(i).position, Quaternion.identity, CurrentUI_Canvas.transform) as GameObject;
-            go.transform.GetChild(0).GetComponent<Text>().text = Party[TurnIndex].SkillSet[i].Name;
-            for(int j=0;j<4;j++)
-            {
-                go.transform.GetChild(1 + j).GetComponent<Text>().text = Party[TurnIndex].SkillSet[i].Costs[j].ToString();
-            }
-            int t = i;
-            go.GetComponent<Button>().onClick.AddListener(delegate { SelectSkill(t); });
-            go.GetComponent<Button>().interactable = checkCost(Party[TurnIndex], Party[TurnIndex].SkillSet[i]);
-                
-        }
     }
 
     bool checkCost(Character C, Skill S)
@@ -71,7 +105,7 @@ public class BattleControl : MonoBehaviour {
     {
         SelectedSkill = Party[TurnIndex].SkillSet[i];
 
-        if (Party[TurnIndex].SkillSet[i].skillType==0)
+        if (Party[TurnIndex].SkillSet[i].skillType==0 || Party[TurnIndex].SkillSet[i].skillType==2)
         {
             SelectTargetSetUp();
         }
@@ -79,36 +113,34 @@ public class BattleControl : MonoBehaviour {
         {
             CastSkillOnTarget(Party[TurnIndex], Party[TurnIndex]);
             NextTurn();
-        }
-        else if(Party[TurnIndex].SkillSet[i].skillType==2)
-        {
-            foreach(Character C in EnemyParty)
-                CastSkillOnTarget(Party[TurnIndex],C);
-            NextTurn();
-        }
+        }       
         else if (Party[TurnIndex].SkillSet[i].skillType == 3)
         {
             foreach (Character C in Party)
                 CastSkillOnTarget(Party[TurnIndex],C);
             NextTurn();
         }
+        else if (Party[TurnIndex].SkillSet[i].skillType == 4)
+        {
+            foreach (Character C in EnemyParty)
+                CastSkillOnTarget(Party[TurnIndex], C);
+            NextTurn();
+        }
     }
 
     void SelectTargetSetUp()
     {
-        CurrentUI_Canvas.transform.GetChild(6).GetComponent<Text>().text = "Select Target";
+        CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text = "Select Target";
         foreach (Character C in EnemyParty)
         {
-            GameObject Go=Instantiate(TargetBox, C.transform.position, Quaternion.identity, C.transform) as GameObject;
-            Go.GetComponent<TargetSelectScript>().BC = this;
-            TargetBoxes.Add(Go);
+           TargetSelectScript tss= C.gameObject.AddComponent<TargetSelectScript>();
+            tss.BC = this;
         }
 
         foreach (Character C in Party)
         {
-            GameObject Go = Instantiate(TargetBox, C.transform.position, Quaternion.identity, C.transform) as GameObject;
-            Go.GetComponent<TargetSelectScript>().BC = this;
-            TargetBoxes.Add(Go);
+            TargetSelectScript tss = C.gameObject.AddComponent<TargetSelectScript>();
+            tss.BC = this;
         }
     }
 
@@ -120,10 +152,17 @@ public class BattleControl : MonoBehaviour {
 
     public void NextTurn()
     {
-        
-        foreach (GameObject g in TargetBoxes)
-            Destroy(g);
-        TargetBoxes.Clear();
+
+        foreach (Character C in EnemyParty)
+        {
+            Destroy(C.gameObject.GetComponent<TargetSelectScript>());
+        }
+
+        foreach (Character C in Party)
+        {
+            Destroy(C.gameObject.GetComponent<TargetSelectScript>());
+        }
+
         if (TurnIndex >= 0)
         {
             Party[TurnIndex].PayForSkill(SelectedSkill.Costs);
@@ -143,8 +182,12 @@ public class BattleControl : MonoBehaviour {
                 Destroy(CurrentUI_Canvas.transform.parent.gameObject);
                 GameObject Go = Instantiate(UI_Window, new Vector2(1.58f, -3.05f), Quaternion.identity) as GameObject;
                 CurrentUI_Canvas = Go.transform.GetChild(0).gameObject;
+                CurrentUI_Canvas.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { DisplayNextSkillPage(); });
+                CurrentUI_Canvas.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(delegate { DisplayPrevSkillPage(); });
                 Party[TurnIndex].HandleStatusEffects(true);
                 Party[TurnIndex].GenerateResources();
+                DisplaySkillIndex = 0;
+                SetUpPortrait();
                 DisplayCurrentSkills();
             }
             else
@@ -174,6 +217,7 @@ public class BattleControl : MonoBehaviour {
             go.transform.GetChild(0).GetComponent<Text>().text = "Continue";
             go.GetComponent<Button>().onClick.AddListener(delegate { ContinueEnemyTurn(); });
             EnemyParty[TurnIndex].HandleStatusEffects(true);
+            EnemyParty[TurnIndex].GenerateResources();
             EnemyParty[TurnIndex].GetComponent<EnemyLogic>().chooseSkill();
             EnemyParty[TurnIndex].HandleStatusEffects(false);
             }
@@ -195,18 +239,24 @@ public class BattleControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        Party[0].SkillSet.Add(Skill.searchID(0));
-        Party[0].SkillSet.Add(Skill.searchID(1));
-        Party[0].SkillSet.Add(Skill.searchID(2));
-        Party[0].SkillSet.Add(Skill.searchID(3));
-        Party[0].SkillSet.Add(Skill.searchID(4));
-        Party[0].SkillSet.Add(Skill.searchID(5));
+
+        for(int i=0;i<26;i++)
+            Party[0].SkillSet.Add(Skill.searchID(i));
+
         Party[1].SkillSet.Add(Skill.searchID(11));
         Party[1].SkillSet.Add(Skill.searchID(6));
         Party[1].SkillSet.Add(Skill.searchID(0));
         EnemyParty[0].SkillSet.Add(Skill.searchID(0));
+        EnemyParty[0].SkillSet.Add(Skill.searchID(6));
+        EnemyParty[0].SkillSet.Add(Skill.searchID(7));
+        EnemyParty[0].SkillSet.Add(Skill.searchID(21));
         EnemyParty[1].SkillSet.Add(Skill.searchID(0));
-        DisplayCurrentSkills();
+        EnemyParty[0].SkillSet.Add(Skill.searchID(6));
+        EnemyParty[1].SkillSet.Add(Skill.searchID(15));
+        EnemyParty[1].SkillSet.Add(Skill.searchID(21));
+
+        TurnIndex = -1;
+        NextTurn();
 		
 	}
 	

@@ -19,7 +19,21 @@ public class Character : MonoBehaviour {
     public void takeDamage(int dmg)
     {
         health -= dmg;
+        if (health > MaxHealth)
+            health = MaxHealth;
+        else if (health < 0)
+            health = 0;
     }
+
+    public bool hasResources(int[] ia)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            if (Current_Resource[i] < ia[i])
+                return false;
+        }
+        return true;
+     }
 
     public void GenerateResources()
     {
@@ -27,7 +41,10 @@ public class Character : MonoBehaviour {
         {
             if (Current_Resource[i] + Regen[i] <= Max_Resource[i])
                 Current_Resource[i] += Regen[i];
+            if (Current_Resource[i] < 0)
+                Current_Resource[i] = 0;
         }
+
     }
 
     public void PayForSkill(int[] costs)
@@ -40,9 +57,9 @@ public class Character : MonoBehaviour {
     {
         for (int i = 0; i < Statuses.Count; i++)
         {
-            if (isPreCombat && !(Statuses[i].Behavior == Status.Status_Behavior.DoT)) //unique effects handled precombat
+            if (isPreCombat && Statuses[i].Behavior != Status.Status_Behavior.DoT && Statuses[i].Stat_Target != Status.Stat_Target_type.Defence) //unique effects handled precombat
                 Statuses[i].action(this);
-            else if (!isPreCombat && Statuses[i].Behavior == Status.Status_Behavior.DoT)
+            else if (!isPreCombat && (Statuses[i].Behavior == Status.Status_Behavior.DoT || Statuses[i].Stat_Target==Status.Stat_Target_type.Defence))
                 Statuses[i].action(this);
         }
         for(int i=0;i<Statuses.Count;i++)

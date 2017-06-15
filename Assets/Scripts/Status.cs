@@ -10,13 +10,14 @@ public class Status {
     public enum Stat_Target_type{Attack, Defence, Regen, Health};
     public enum Status_Behavior { DoT, OneTime, Unique}; //DoTs are called post combat
     public int[] ArrayModifiers=new int[4]; //one time changes to stats or the modifiers for DoTs
-    Stat_Target_type Stat_Target;
+    public Stat_Target_type Stat_Target;
     public Status_Behavior Behavior;
     public int duration;
     public Action<Character> action;
     public int BaseValue; //set equal to duration to apply 1 time effects, otherwise base dmg for dots, -1 and -1 duration for perma buffs
     public List<Skill> skillSet=new List<Skill> { }; //when needed
     public Character Attacker;
+    public string InflictingSkillName;
 
     public Status() { }
 
@@ -246,7 +247,7 @@ public class Status {
                 Poison.action = Poison.RollStatus;
                 return Poison;
             case 1:
-                Status GenFire = new Status(1, "Generate Fire", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 5, 5);
+                Status GenFire = new Status(1, "Gen 2 Chi", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 5, 5);
                 GenFire.action = GenFire.RollStatus;
                 return GenFire;
             case 2:
@@ -254,23 +255,23 @@ public class Status {
                 Burn.action = Burn.RollStatus;
                 return Burn;
             case 3:
-                Status Heal = new Status(3, "Healing", new int[4] { 0, 0, 3, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 8);
+                Status Heal = new Status(3, "Healing", new int[4] { 0, 0, 3, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, -9);
                 Heal.action = Heal.RollStatus;
                 return Heal;
             case 4:
-                Status BuffFireAtk = new Status(4, "Fire Attack+", new int[4] { 0, 100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireAtk = new Status(4, "+100 Fire Atk", new int[4] { 0, 100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
                 BuffFireAtk.action = BuffFireAtk.RollStatus;
                 return BuffFireAtk;
             case 5:
-                Status BuffFireDef = new Status(5, "Fire Defence+", new int[4] { 0, 50, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireDef = new Status(5, "+50 Fire Def", new int[4] { 0, 50, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
                 BuffFireDef.action = BuffFireDef.RollStatus;
                 return BuffFireDef;
             case 6:
-                Status BeserkStatus = new Status(6, "Beserk", Status_Behavior.Unique, 6, 6);
+                Status BeserkStatus = new Status(6, "Beserk", Status_Behavior.Unique, 3, 3);
                 BeserkStatus.action = BeserkStatus.Beserker;
                 return BeserkStatus;
             case 7:
-                Status BuffAtkandFire = new Status(7, "Phys and Fire Atk+", new int[4] { 250, 250, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 6, 6);
+                Status BuffAtkandFire = new Status(7, "+Stam and Chi atk", new int[4] { 250, 250, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 3, 3);
                 BuffAtkandFire.action = BuffAtkandFire.RollStatus;
                 return BuffAtkandFire;
             case 8:
@@ -278,31 +279,31 @@ public class Status {
                 ArcaneIntellectRegen.action = ArcaneIntellectRegen.RollStatus;
                 return ArcaneIntellectRegen;
             case 9:
-                Status StingingSwarmStatus = new Status(9, "Surrounded by wasps", Status_Behavior.DoT, 1, 10);
+                Status StingingSwarmStatus = new Status(9, "Wasps swarm", Status_Behavior.DoT, 1, 10);
                 StingingSwarmStatus.action = StingingSwarmStatus.StingingSwarmDamage;
                 return StingingSwarmStatus;
             case 10:
-                Status DropPhysDef = new Status(10, "Physical Defense Lowered", new int[4] { -10, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 5, 5);
+                Status DropPhysDef = new Status(10, "-Phys Def", new int[4] { -10, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 5, 5);
                 DropPhysDef.action = DropPhysDef.RollStatus;
                 return DropPhysDef;
             case 11:
-                Status WolfTransform = new Status(11, "Turn into werewolf", Status_Behavior.Unique, 1, 1);
+                Status WolfTransform = new Status(11, "werewolf", Status_Behavior.Unique, 1, 1);
                // WolfTransform.action = WolfTransform.WolfForm;
                 return WolfTransform;
             case 12:
-                Status HumanTransform = new Status(12, "Turn back human", Status_Behavior.Unique, 1, 1);
+                Status HumanTransform = new Status(12, "human", Status_Behavior.Unique, 1, 1);
                // HumanTransform.action = HumanTransform.HumanForm;
                 return HumanTransform;
             case 13:
-                Status BuffAllAtk = new Status(13, "Buff all Attack stats", new int[4] {20,20,20,0}, Stat_Target_type.Attack, Status_Behavior.OneTime, 4, 4);
+                Status BuffAllAtk = new Status(13, "+All Atk", new int[4] {20,20,20,0}, Stat_Target_type.Attack, Status_Behavior.OneTime, 4, 4);
                 BuffAllAtk.action = BuffAllAtk.RollStatus;
                 return BuffAllAtk;
             case 14:
-                Status Blocking = new Status(14, "Block phyical", new int[4] { 200, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
+                Status Blocking = new Status(14, "+200 Phys Def", new int[4] { 200, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
                 Blocking.action = Blocking.RollStatus;
                 return Blocking;
             case 15:
-                Status FireHose = new Status(15, "Reduced Fire Attack", new int[4] { 0, -100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 5, 5);
+                Status FireHose = new Status(15, "-100 Fire Atk", new int[4] { 0, -100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 5, 5);
                 FireHose.action = FireHose.RollStatus;
                 return FireHose;
             case 16:
@@ -324,7 +325,7 @@ public class Status {
         //used by copy constructor to ensure action is called by the copy instance;
         switch(ID)
         {
-            case 5:
+            case 6:
                 return Beserker;
             case 9:
                 return StingingSwarmDamage;

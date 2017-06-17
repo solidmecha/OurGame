@@ -32,5 +32,6 @@ public class ShowStatusOnHover : MonoBehaviour {
     private void Start()
     {
         ThisChar = GetComponent<Character>();
+        BC = GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleControl>();
     }
 }

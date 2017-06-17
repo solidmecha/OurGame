@@ -66,7 +66,7 @@ public class Skill {
             for (int i = 0; i < 4; i++)
             {
                 mods[i] = Costs[i] / totalMods;
-                Dmg += ((user.Attack[i] + 100f) / (target.Defence[i] + 100f)) * BaseDamage * mods[i];
+                Dmg += ((user.Attack[i] * user.Attack[i]) / (4*target.Defence[i] + 100f)) * BaseDamage * mods[i];
             }
         }
         else //healing
@@ -131,19 +131,19 @@ public class Skill {
 
             case 0:
                 costs = new int[4] { -1, 0, 0, 0 };
-                Skill BasicAttack = new Skill("Basic Attack", "basically attacks them", 10, costs, 0,0);
+                Skill BasicAttack = new Skill("Basic Attack", "basically attacks them", 15, costs, 0,0);
                 return BasicAttack;
             case 1:
                 costs = new int[4] { 0, -1, 0, 0 };
-                Skill MagmaJet = new Skill("Magma Jet", "The Pyromancer's first lesson", 10, costs, 0, 0);
+                Skill MagmaJet = new Skill("Magma Jet", "The Pyromancer's first lesson", 15, costs, 0, 0);
                 return MagmaJet;
             case 2:
                 costs = new int[4] { 0, 0, -1, 0 };
-                Skill IceNeedle = new Skill("Ice Needle", "A simple, cold thread", 10, costs, 0, 0);
+                Skill IceNeedle = new Skill("Ice Needle", "A simple, cold thread", 15, costs, 0, 0);
                 return IceNeedle;
             case 3:
                 costs = new int[4] {0,0,0,-2};
-                Skill Pray=new Skill("Pray", "heal self", -10, costs, 0,1);
+                Skill Pray=new Skill("Pray", "heal self", -15, costs, 0,2);
                 return Pray;
             case 4:
                 costs = new int[4] { 0, 10, 4, 0};
@@ -201,7 +201,7 @@ public class Skill {
                 Skill Bite = new Skill("Bite", "Om nom nom", 65, costs, Debuffs, Buffs, 3, 0);
                 return Bite;
             case 14:
-                costs = new int[4] { 1, 0, 0, 0 };
+                costs = new int[4] { -2, 0, 0, 0 };
                 Buffs.Add(Status.StatusByID(12));
                 Skill HumanForm = new Skill("Human form", "Revert to normal", 0, costs, Debuffs, Buffs, 3, 1);
                 return HumanForm;

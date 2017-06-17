@@ -23,7 +23,7 @@ public class EnemyLogic : MonoBehaviour {
                         if (!skill.hasStatusOfSameSkill(stat, ThisChar))
                         {
                             int multi = skill.Costs[0] + skill.Costs[1] + skill.Costs[2] + skill.Costs[3];
-                            for (int i = -3; i < multi; i++)
+                            for (int i = 0; i < multi; i++)
                                 UsableSkills.Add(skill);
                         }
                     }
@@ -86,9 +86,22 @@ public class EnemyLogic : MonoBehaviour {
 
     }
 
+    public void GenerateEnemy()
+    {
+        ThisChar.health = BC.WC.RNG.Next(750, 4000);
+        int N = BC.WC.RNG.Next(4, 9);
+        ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(3)));
+        for (int i=0; i<N;i++)
+        {
+            ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(25)));
+        }
+    }
+
 	// Use this for initialization
 	void Start () {
         ThisChar = GetComponent<Character>();
+        BC = GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleControl>();
+        GenerateEnemy();
 	}
 	
 	// Update is called once per frame

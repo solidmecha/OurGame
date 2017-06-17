@@ -5,10 +5,20 @@ using UnityEngine;
 public class EncounterScript : MonoBehaviour {
 
     public GameObject Message;
+    public WorldControl WC;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Instantiate(Message, Vector2.zero, Quaternion.identity);
+        if (Message != null)
+            Instantiate(Message, new Vector2(0, 2), Quaternion.identity);
+        else
+            WC.GetComponent<BattleControl>().HandleBattle();
+        //Destroy(this);
+    }
+
+    public void OnMouseDown()
+    {
+        WC.WorldCharacter.transform.position = (Vector2)transform.position+new Vector2(0,0.1f);
     }
 
     // Use this for initialization

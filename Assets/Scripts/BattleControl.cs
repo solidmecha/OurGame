@@ -5,8 +5,7 @@ using UnityEngine.UI;
 
 public class BattleControl : MonoBehaviour {
 
-    public enum GameState { Battle, World, Market};
-    GameState CurrentState;
+    public WorldControl WC;
 
     public List<Character> Party;
     public List<Character> EnemyParty;
@@ -20,19 +19,35 @@ public class BattleControl : MonoBehaviour {
     public int DisplaySkillIndex;
     public List<GameObject> CurrentSkillButtons = new List<GameObject> { };
     public GameObject UI_Status_Window;
+
+    public GameObject Background;
+    public GameObject EnemyPrefab;
     
-    void HandleBattle()
+    public void HandleBattle()
     {
-        /*
-         * Display Char info
-         *Select Skill
-         *Select target
-         * 
-         */
+        WC.MoveMap();
+        Background=Instantiate(Background, Vector2.zero, Quaternion.identity);
+        int R = WC.RNG.Next(1, 7);
+        for(int i=0;i<R;i++)
+        {
+           GameObject go = Instantiate(EnemyPrefab, Background.transform.GetChild(0).GetChild(i).position, Quaternion.identity) as GameObject;
+            EnemyParty.Add(go.GetComponent<Character>());
+        }
+        for(int i=0;i<WC.CurrentParty.Count;i++)
+        {
+            GameObject go = Instantiate(WC.CurrentParty[i], Background.transform.GetChild(1).GetChild(i).position, Quaternion.identity) as GameObject;
+            Party.Add(go.GetComponent<Character>());
+            foreach (Skill S in WC.CurrentParty[i].GetComponent<Character>().SkillSet)
+                Party[i].SkillSet.Add(S);
+        }
+        CurrentPortrait = Instantiate(CurrentPortrait, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;
+        TurnIndex = -1;
+        NextTurn();
     }
 
     void DisplayCurrentSkills()
     {
+        print(Party[TurnIndex].SkillSet.Count);
         foreach (GameObject g in CurrentSkillButtons)
             Destroy(g);
         CurrentSkillButtons.Clear();
@@ -179,7 +194,8 @@ public class BattleControl : MonoBehaviour {
         {
             if (Party[TurnIndex].health > 0)
             {
-                Destroy(CurrentUI_Canvas.transform.parent.gameObject);
+                if(CurrentUI_Canvas!=null)
+                    Destroy(CurrentUI_Canvas.transform.parent.gameObject);
                 GameObject Go = Instantiate(UI_Window, new Vector2(1.58f, -3.05f), Quaternion.identity) as GameObject;
                 CurrentUI_Canvas = Go.transform.GetChild(0).gameObject;
                 CurrentUI_Canvas.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { DisplayNextSkillPage(); });
@@ -240,6 +256,8 @@ public class BattleControl : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        WC = GetComponent<WorldControl>();
+        /*
         for(int i=0;i<26;i++)
             Party[0].SkillSet.Add(Skill.searchID(i));
 
@@ -256,7 +274,8 @@ public class BattleControl : MonoBehaviour {
         EnemyParty[1].SkillSet.Add(Skill.searchID(21));
 
         TurnIndex = -1;
-        NextTurn();
+        NextTurn(); 
+        */
 		
 	}
 	

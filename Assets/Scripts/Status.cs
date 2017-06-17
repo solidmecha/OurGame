@@ -130,7 +130,7 @@ public class Status {
             for (int i = 0; i < 4; i++)
             {
                 mods[i] = ArrayModifiers[i] / totalMods;
-                Dmg += ((Attacker.Attack[i] + 100) / (C.Defence[i] + 100)) * BaseValue * mods[i];
+                Dmg += ((Attacker.Attack[i] *Attacker.Attack[i]) / (4*C.Defence[i] + 100)) * BaseValue * mods[i];
             }
         }
         else //healing
@@ -183,18 +183,19 @@ public class Status {
                 skillSet.Add(S);
             }
             C.SkillSet.Clear();
+            C.SkillSet.Add(Skill.searchID(0));
             C.SkillSet.Add(Skill.searchID(12));
             C.SkillSet.Add(Skill.searchID(13));
             C.SkillSet.Add(Skill.searchID(14));
             foreach (Skill S in skillSet)
-                C.SkillSet[2].BuffList[0].skillSet.Add(S);
+                C.SkillSet[3].BuffList[0].skillSet.Add(S);
         }
         duration--;
     }
 
     public void HumanForm(Character C)
     {
-        if (duration == BaseValue)
+        if (duration == BaseValue && skillSet.Count>0)
         {
             C.SkillSet.Clear();
             foreach (Skill S in skillSet)
@@ -251,7 +252,7 @@ public class Status {
                 GenFire.action = GenFire.RollStatus;
                 return GenFire;
             case 2:
-                Status Burn=new Status(2, "Burning", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 10);
+                Status Burn=new Status(2, "Burning", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 25);
                 Burn.action = Burn.RollStatus;
                 return Burn;
             case 3:
@@ -259,11 +260,11 @@ public class Status {
                 Heal.action = Heal.RollStatus;
                 return Heal;
             case 4:
-                Status BuffFireAtk = new Status(4, "+100 Fire Atk", new int[4] { 0, 100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireAtk = new Status(4, "+100 Fire Atk", new int[4] { 0, 20, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
                 BuffFireAtk.action = BuffFireAtk.RollStatus;
                 return BuffFireAtk;
             case 5:
-                Status BuffFireDef = new Status(5, "+50 Fire Def", new int[4] { 0, 50, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireDef = new Status(5, "+10 Fire Def", new int[4] { 0, 10, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
                 BuffFireDef.action = BuffFireDef.RollStatus;
                 return BuffFireDef;
             case 6:
@@ -271,7 +272,7 @@ public class Status {
                 BeserkStatus.action = BeserkStatus.Beserker;
                 return BeserkStatus;
             case 7:
-                Status BuffAtkandFire = new Status(7, "+Stam and Chi atk", new int[4] { 250, 250, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 3, 3);
+                Status BuffAtkandFire = new Status(7, "+Stam and Chi atk", new int[4] { 30, 30, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 3, 3);
                 BuffAtkandFire.action = BuffAtkandFire.RollStatus;
                 return BuffAtkandFire;
             case 8:
@@ -283,7 +284,7 @@ public class Status {
                 StingingSwarmStatus.action = StingingSwarmStatus.StingingSwarmDamage;
                 return StingingSwarmStatus;
             case 10:
-                Status DropPhysDef = new Status(10, "-Phys Def", new int[4] { -10, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 5, 5);
+                Status DropPhysDef = new Status(10, "-Phys Def", new int[4] { -25, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 5, 5);
                 DropPhysDef.action = DropPhysDef.RollStatus;
                 return DropPhysDef;
             case 11:
@@ -295,15 +296,15 @@ public class Status {
                // HumanTransform.action = HumanTransform.HumanForm;
                 return HumanTransform;
             case 13:
-                Status BuffAllAtk = new Status(13, "+All Atk", new int[4] {20,20,20,0}, Stat_Target_type.Attack, Status_Behavior.OneTime, 4, 4);
+                Status BuffAllAtk = new Status(13, "+All Atk", new int[4] {6,6,6,6}, Stat_Target_type.Attack, Status_Behavior.OneTime, 4, 4);
                 BuffAllAtk.action = BuffAllAtk.RollStatus;
                 return BuffAllAtk;
             case 14:
-                Status Blocking = new Status(14, "+200 Phys Def", new int[4] { 200, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
+                Status Blocking = new Status(14, "+300 Phys Def", new int[4] { 300, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
                 Blocking.action = Blocking.RollStatus;
                 return Blocking;
             case 15:
-                Status FireHose = new Status(15, "-100 Fire Atk", new int[4] { 0, -100, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 5, 5);
+                Status FireHose = new Status(15, "-15 Fire Atk", new int[4] { 0, -15, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 5, 5);
                 FireHose.action = FireHose.RollStatus;
                 return FireHose;
             case 16:

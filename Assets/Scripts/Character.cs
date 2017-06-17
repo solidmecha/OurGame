@@ -18,6 +18,7 @@ public class Character : MonoBehaviour {
 
     public void takeDamage(int dmg)
     {
+        print(name + " " + dmg);
         health -= dmg;
         if (health > MaxHealth)
             health = MaxHealth;

@@ -9,6 +9,7 @@ public class WorldControl : MonoBehaviour {
     public GameObject WorldCharacter;
     public GameObject Map;
     public System.Random RNG = new System.Random();
+    public bool InEncounter;
 
     public void MoveMap()
     {

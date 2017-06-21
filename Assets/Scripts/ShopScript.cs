@@ -161,6 +161,8 @@ public class ShopScript : MonoBehaviour {
         SelectionArrow.transform.SetParent(transform.GetChild(1 + index));
         SelectionArrow.transform.localPosition = new Vector2(0,.7f);
         SetUpPortrait();
+        CharacterSkillIndex = 0;
+        DisplayShopSkills();
         DisplayCharSkills();
     }
 
@@ -177,8 +179,8 @@ public class ShopScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         WC = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldControl>();
-
-        for (int i = 0; i < 26; i++)
+        WC.InEncounter = true;
+        for (int i = 0; i < 36; i++)
             SkillsForSale.Add(Skill.searchID(i));
 
         CurrentPortrait = Instantiate(CurrentPortrait, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;
@@ -206,6 +208,7 @@ public class ShopScript : MonoBehaviour {
 
     void CleanUpShop()
     {
+        WC.InEncounter = false;
         Destroy(CurrentPortrait);
         Destroy(CurrentUI_Canvas.transform.root.gameObject);
         Destroy(Character_Skill_UI);

@@ -18,7 +18,10 @@ public class EncounterScript : MonoBehaviour {
 
     public void OnMouseDown()
     {
-        WC.WorldCharacter.transform.position = (Vector2)transform.position+new Vector2(0,0.1f);
+        if (!WC.InEncounter)
+        {
+            WC.WorldCharacter.transform.position = (Vector2)transform.position + new Vector2(0, 0.1f);
+        }
     }
 
     // Use this for initialization

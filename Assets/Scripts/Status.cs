@@ -121,7 +121,7 @@ public class Status {
     public void Tick(Character C)
     {
         float Dmg = 0;
-        float[] mods = new float[4];
+        float[] mods = new float[4] { 0, 0, 0, 0 };
 
         float totalMods = ArrayModifiers[0] + ArrayModifiers[1] + ArrayModifiers[2] + ArrayModifiers[3];
 
@@ -130,8 +130,9 @@ public class Status {
             for (int i = 0; i < 4; i++)
             {
                 mods[i] = ArrayModifiers[i] / totalMods;
-                Dmg += ((Attacker.Attack[i] *Attacker.Attack[i]) / (4*C.Defence[i] + 100)) * BaseValue * mods[i];
+                Dmg += ((Attacker.Attack[i] *Attacker.Attack[i]) / (4f*C.Defence[i] + 100f)) * BaseValue * mods[i];
             }
+            MonoBehaviour.print("Will dmg " +Dmg);
         }
         else //healing
         {           
@@ -234,6 +235,26 @@ public class Status {
         }
     }
 
+    public void DecimateAction(Character C)
+    {
+        float f = C.health * BaseValue/100f;
+        C.takeDamage(Mathf.RoundToInt(f));
+        duration--;
+    }
+
+    public void WispAction(Character C)
+    {
+        InflictingSkillName = "Cursed by Wisp";
+        if(C.Defence[2]>-14)
+            C.Defence[2] -= 2;
+        RollStatus(C);
+    }
+
+    public void WheelOfFateAction(Character C)
+    {
+        
+    }
+
     public void SetAction()
     {
         action = ActionByID(ID);
@@ -244,15 +265,15 @@ public class Status {
         switch(id)
         {
             case 0:
-                Status Poison = new Status(0, "Poison", new int[4] { 1,0,0,0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 10);
+                Status Poison = new Status(0, "Poison", new int[4] { 1,0,0,0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 20);
                 Poison.action = Poison.RollStatus;
                 return Poison;
             case 1:
-                Status GenFire = new Status(1, "Gen 2 Chi", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 5, 5);
+                Status GenFire = new Status(1, "Gen 2 Chi", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 4, 4);
                 GenFire.action = GenFire.RollStatus;
                 return GenFire;
             case 2:
-                Status Burn=new Status(2, "Burning", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 25);
+                Status Burn=new Status(2, "Burning", new int[4] { 0, 2, 0, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, 5, 30);
                 Burn.action = Burn.RollStatus;
                 return Burn;
             case 3:
@@ -260,11 +281,11 @@ public class Status {
                 Heal.action = Heal.RollStatus;
                 return Heal;
             case 4:
-                Status BuffFireAtk = new Status(4, "+100 Fire Atk", new int[4] { 0, 20, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireAtk = new Status(4, "+20 Fire Atk", new int[4] { 0, 20, 0, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 7, 7);
                 BuffFireAtk.action = BuffFireAtk.RollStatus;
                 return BuffFireAtk;
             case 5:
-                Status BuffFireDef = new Status(5, "+10 Fire Def", new int[4] { 0, 10, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
+                Status BuffFireDef = new Status(5, "+100 Fire Def", new int[4] { 0, 100, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 7, 7);
                 BuffFireDef.action = BuffFireDef.RollStatus;
                 return BuffFireDef;
             case 6:
@@ -300,7 +321,7 @@ public class Status {
                 BuffAllAtk.action = BuffAllAtk.RollStatus;
                 return BuffAllAtk;
             case 14:
-                Status Blocking = new Status(14, "+300 Phys Def", new int[4] { 300, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
+                Status Blocking = new Status(14, "+400 Phys Def", new int[4] { 400, 0, 0, 0 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 2, 2);
                 Blocking.action = Blocking.RollStatus;
                 return Blocking;
             case 15:
@@ -312,9 +333,26 @@ public class Status {
                 ReduceStam.action = ReduceStam.RollStatus;
                 return ReduceStam;
             case 17:
-                Status PrepareStat = new Status(17, "PrepareStat", Status.Status_Behavior.Unique, -1, -1);
+                Status PrepareStat = new Status(17, "Prepared", Status.Status_Behavior.Unique, -1, -1);
                 PrepareStat.SetAction();
                 return PrepareStat;
+            case 18:
+                Status DecimateStatus = new Status(18, "Decimate", Status_Behavior.DoT, 5, 10);
+                DecimateStatus.action = DecimateStatus.DecimateAction;
+                return DecimateStatus;
+            case 19:
+                Status Wisp = new Status(19, "Angry Wisp", new int[4] { 0, 0, 1, 0 }, Stat_Target_type.Health, Status_Behavior.DoT, -1, 5);
+                Wisp.action = Wisp.WispAction;
+                return Wisp;
+            case 20:
+                Status FocusBuff = new Status(20, "Focused", new int[4] { 0, 0, 12, 0 }, Stat_Target_type.Attack, Status_Behavior.OneTime, 3, 3);
+                FocusBuff.action = FocusBuff.RollStatus;
+                return FocusBuff;
+            case 21:
+                Status Melted = new Status(21, "Melted", new int[4] { 0, 0, -2, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 4, 4);
+                Melted.action = Melted.RollStatus;
+                return Melted;
+
             default:
                 Status Safe = new Status();
                 return Safe;
@@ -336,6 +374,10 @@ public class Status {
                 return HumanForm;
             case 17:
                 return Prepare;
+            case 18:
+                return DecimateAction;
+            case 19:
+                return WispAction;
 
             default:
                 return RollStatus;

@@ -22,8 +22,11 @@ public class Character : MonoBehaviour {
         health -= dmg;
         if (health > MaxHealth)
             health = MaxHealth;
-        else if (health < 0)
+        else if (health <= 0)
+        {
             health = 0;
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleControl>().CheckVictory();
+        }
     }
 
     public bool hasResources(int[] ia)
@@ -40,7 +43,11 @@ public class Character : MonoBehaviour {
     {
         for(int i=0;i<4;i++)
         {
-            if (Current_Resource[i] + Regen[i] <= Max_Resource[i])
+            if(Current_Resource[i] + Regen[i] > Max_Resource[i])
+            {
+                Current_Resource[i] = Max_Resource[i];
+            }
+            else if (Current_Resource[i] + Regen[i] <= Max_Resource[i])
                 Current_Resource[i] += Regen[i];
             if (Current_Resource[i] < 0)
                 Current_Resource[i] = 0;

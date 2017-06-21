@@ -11,7 +11,7 @@ public class Skill {
     public List<Status> DebuffList = new List<Status> { };
     public List<Status> BuffList = new List<Status> { };
     public int levelReq;
-    public int skillType; //0= single target, 1=self target, 2=Party target, 3=all enemies, 4=all allies
+    public int skillType; //0= single target, 1=self target, 2=Party target, 3=all allies, 4=all enemies
 
 
     public Skill() { }
@@ -66,7 +66,7 @@ public class Skill {
             for (int i = 0; i < 4; i++)
             {
                 mods[i] = Costs[i] / totalMods;
-                Dmg += ((user.Attack[i] * user.Attack[i]) / (4*target.Defence[i] + 100f)) * BaseDamage * mods[i];
+                Dmg += ((user.Attack[i] * user.Attack[i]) / (4f*target.Defence[i] + 100f)) * BaseDamage * mods[i];
             }
         }
         else //healing
@@ -253,6 +253,66 @@ public class Skill {
                 Buffs.Add(Status.StatusByID(17));
                 Skill Preparation = new Skill("Preparation", "Increase base damage", 0, costs, Debuffs, Buffs, 3, 1);
                 return Preparation;
+            case 25:
+                costs = new int[4] { 0, 7, 6, 0 };
+                Debuffs.Add(Status.StatusByID(18));
+                Skill Decimate = new Skill("Decimate", "10% hp dot", 0, costs, Debuffs, Buffs, 3, 0);
+                return Decimate;
+
+            case 26:
+                costs = new int[4] { 0, 0, -1, 0 };
+                Debuffs.Add(Status.StatusByID(19));
+                Skill WillOWisp = new Skill("Will-O'-Wisp", "Stacking Dot", 0, costs, Debuffs, Buffs, 30, 0);
+                return WillOWisp;
+            case 27:
+                costs = new int[4] { 0, 0, 6, 0 };
+                Buffs.Add(Status.StatusByID(20));
+                Skill Focus = new Skill("Focus", "buff mana atk", 0, costs, Debuffs, Buffs, 50, 1);
+                return Focus;
+            case 28:
+                costs = new int[4] { 0, 5, 0, 0 };
+                Debuffs.Add(Status.StatusByID(21));
+                Skill melt = new Skill("Melt", "Lower Ice Attack and Regen", 35, costs, 45, 0);
+                return melt;
+            case 29:
+                costs = new int[4] {3, 0,0,0};
+                Debuffs.Add(Status.StatusByID(0));
+                Skill Plague = new Skill("Plague dart", "poison", 20, costs, Debuffs, Buffs, 40, 0);
+                return Plague;
+            case 30:
+                costs = new int[4] { 3, 0, 5, 0 };
+                Buffs.Add(Status.StatusByID(13));
+                Skill MeditativeStrike = new Skill("Meditative Strike", "Strike and raise all attack", 25, costs, Debuffs, Buffs, 50, 0);
+                return MeditativeStrike;
+            case 31:
+                costs = new int[4] { 6, 0, 0, 10 };
+                Skill Earthquake = new Skill("Earthquake", "The ground trembles", 30, costs, 150, 4);
+                return Earthquake;
+            case 32:
+                costs = new int[4] { 9, 5, 0, 0 };
+                Skill Fissure = new Skill("Fissure", "The ground opens beneath them", 55, costs, 40, 0);
+                return Fissure;
+            case 33:
+                costs = new int[4] { 0, 0, 20, 0 };
+                Buffs.Add(Status.StatusByID(18));
+                Debuffs.Add(Status.StatusByID(18));
+                Skill SacrificialPact = new Skill("SacrificialPact", "Take 90% of your health for 50% of theirs", 0, costs, Debuffs, Buffs, 200, 0);
+                SacrificialPact.BuffList[0].duration = 1;
+                SacrificialPact.BuffList[0].BaseValue = 90;
+                SacrificialPact.BuffList[0].duration = 1;
+                SacrificialPact.DebuffList[0].BaseValue = 50;
+                return SacrificialPact;
+
+            case 34:
+                costs = new int[4] { 3,0,4,0};
+                Buffs.Add(Status.StatusByID(1));
+                Skill GhostFire = new Skill("Ghost Fire", "Generate fire", 20, costs, Debuffs, Buffs, 75, 0);
+                return GhostFire;
+            case 35:
+                costs = new int[4] {0,0,0,15};
+                Skill Revive = new Skill("Revive", "Heal a KO ally", -100, costs, 350, 2);
+                return Revive;
+
             default:
                 costs = new int[4] { 1, 0, 0, 0 };
                 Skill wait = new Skill("Wait", "waits", 0, costs, Debuffs, Buffs, 0, 1);

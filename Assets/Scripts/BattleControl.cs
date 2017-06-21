@@ -19,14 +19,15 @@ public class BattleControl : MonoBehaviour {
     public int DisplaySkillIndex;
     public List<GameObject> CurrentSkillButtons = new List<GameObject> { };
     public GameObject UI_Status_Window;
-
     public GameObject Background;
+    public GameObject BackgroundPrefab;
+    public GameObject PortraitPrefab;
     public GameObject EnemyPrefab;
     
     public void HandleBattle()
     {
         WC.MoveMap();
-        Background=Instantiate(Background, Vector2.zero, Quaternion.identity);
+        Background=Instantiate(BackgroundPrefab, Vector2.zero, Quaternion.identity);
         int R = WC.RNG.Next(1, 7);
         for(int i=0;i<R;i++)
         {
@@ -40,14 +41,13 @@ public class BattleControl : MonoBehaviour {
             foreach (Skill S in WC.CurrentParty[i].GetComponent<Character>().SkillSet)
                 Party[i].SkillSet.Add(S);
         }
-        CurrentPortrait = Instantiate(CurrentPortrait, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;
+        CurrentPortrait = Instantiate(PortraitPrefab, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;
         TurnIndex = -1;
         NextTurn();
     }
 
     void DisplayCurrentSkills()
     {
-        print(Party[TurnIndex].SkillSet.Count);
         foreach (GameObject g in CurrentSkillButtons)
             Destroy(g);
         CurrentSkillButtons.Clear();
@@ -167,47 +167,49 @@ public class BattleControl : MonoBehaviour {
 
     public void NextTurn()
     {
-
-        foreach (Character C in EnemyParty)
+        if (Party.Count > 0)
         {
-            Destroy(C.gameObject.GetComponent<TargetSelectScript>());
-        }
-
-        foreach (Character C in Party)
-        {
-            Destroy(C.gameObject.GetComponent<TargetSelectScript>());
-        }
-
-        if (TurnIndex >= 0)
-        {
-            Party[TurnIndex].PayForSkill(SelectedSkill.Costs);
-            Party[TurnIndex].HandleStatusEffects(false);
-        }
-
-        TurnIndex++;
-        if(TurnIndex==Party.Count)
-        {
-            TurnIndex = 0;
-            EnemyTurn();
-        }
-        else
-        {
-            if (Party[TurnIndex].health > 0)
+            foreach (Character C in EnemyParty)
             {
-                if(CurrentUI_Canvas!=null)
-                    Destroy(CurrentUI_Canvas.transform.parent.gameObject);
-                GameObject Go = Instantiate(UI_Window, new Vector2(1.58f, -3.05f), Quaternion.identity) as GameObject;
-                CurrentUI_Canvas = Go.transform.GetChild(0).gameObject;
-                CurrentUI_Canvas.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { DisplayNextSkillPage(); });
-                CurrentUI_Canvas.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(delegate { DisplayPrevSkillPage(); });
-                Party[TurnIndex].HandleStatusEffects(true);
-                Party[TurnIndex].GenerateResources();
-                DisplaySkillIndex = 0;
-                SetUpPortrait();
-                DisplayCurrentSkills();
+                Destroy(C.gameObject.GetComponent<TargetSelectScript>());
+            }
+
+            foreach (Character C in Party)
+            {
+                Destroy(C.gameObject.GetComponent<TargetSelectScript>());
+            }
+
+            if (TurnIndex >= 0 && Party[TurnIndex].health > 0)
+            {
+                Party[TurnIndex].PayForSkill(SelectedSkill.Costs);
+                Party[TurnIndex].HandleStatusEffects(false);
+            }
+
+            TurnIndex++;
+            if (TurnIndex == Party.Count)
+            {
+                TurnIndex = 0;
+                EnemyTurn();
             }
             else
-                NextTurn();
+            {
+                if (Party[TurnIndex].health > 0)
+                {
+                    if (CurrentUI_Canvas != null)
+                        Destroy(CurrentUI_Canvas.transform.parent.gameObject);
+                    GameObject Go = Instantiate(UI_Window, new Vector2(1.58f, -3.05f), Quaternion.identity) as GameObject;
+                    CurrentUI_Canvas = Go.transform.GetChild(0).gameObject;
+                    CurrentUI_Canvas.transform.GetChild(6).GetComponent<Button>().onClick.AddListener(delegate { DisplayNextSkillPage(); });
+                    CurrentUI_Canvas.transform.GetChild(7).GetComponent<Button>().onClick.AddListener(delegate { DisplayPrevSkillPage(); });
+                    Party[TurnIndex].HandleStatusEffects(true);
+                    Party[TurnIndex].GenerateResources();
+                    DisplaySkillIndex = 0;
+                    SetUpPortrait();
+                    DisplayCurrentSkills();
+                }
+                else
+                    NextTurn();
+            }
         }
 
     }
@@ -237,20 +239,67 @@ public class BattleControl : MonoBehaviour {
             EnemyParty[TurnIndex].GetComponent<EnemyLogic>().chooseSkill();
             EnemyParty[TurnIndex].HandleStatusEffects(false);
             }
+            else
+        {
+            ContinueEnemyTurn();
+        }
     }
 
     void ContinueEnemyTurn()
     {
-        if (TurnIndex == EnemyParty.Count-1)
+        if (EnemyParty.Count > 0)
         {
-            TurnIndex = -1;
-            NextTurn();
+            if (TurnIndex == EnemyParty.Count - 1)
+            {
+                TurnIndex = -1;
+                NextTurn();
+            }
+            else
+            {
+                TurnIndex++;
+                EnemyTurn();
+            }
         }
-        else
+    }
+
+    public void CheckVictory()
+    {
+        bool isLost=true;
+        foreach(Character C in Party)
         {
-            TurnIndex++;
-            EnemyTurn();
+            if (C.health > 0)
+                isLost = false;
         }
+        if (isLost)
+        {
+            print("Party was defeated...");
+            CleanUpBattle();
+        }
+        isLost = true;
+        foreach (Character C in EnemyParty)
+        {
+            if (C.health > 0)
+                isLost = false;
+        }
+        if (isLost)
+        {
+            print("Party was Victorious!!!");
+            CleanUpBattle();
+        }
+    }
+
+    void CleanUpBattle()
+    {
+        Destroy(Background);
+        Destroy(CurrentPortrait);
+        Destroy(CurrentUI_Canvas.transform.root.gameObject);
+        for (int i = 0; i < Party.Count; i++)
+            Destroy(Party[i].gameObject);
+        for (int i = 0; i < EnemyParty.Count; i++)
+            Destroy(EnemyParty[i].gameObject);
+        Party.Clear();
+        EnemyParty.Clear();
+        WC.MoveMap();
     }
 
 	// Use this for initialization

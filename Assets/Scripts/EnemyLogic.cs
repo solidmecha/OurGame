@@ -88,12 +88,14 @@ public class EnemyLogic : MonoBehaviour {
 
     public void GenerateEnemy()
     {
-        ThisChar.health = BC.WC.RNG.Next(750, 4000);
+        int h= BC.WC.RNG.Next(750, 2500);
+        ThisChar.health = h;
+        ThisChar.MaxHealth = h;
         int N = BC.WC.RNG.Next(4, 9);
         ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(3)));
         for (int i=0; i<N;i++)
         {
-            ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(25)));
+            ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(35)));
         }
     }
 

@@ -27,6 +27,7 @@ public class ShowStatusOnHover : MonoBehaviour {
         Text T = CurrStatWindow.transform.GetChild(0).GetChild(1).GetComponent<Text>();
         foreach (Status S in ThisChar.Statuses)
             T.text += "\n" + S.name + " " + S.duration + " turns";
+        CurrStatWindow.transform.SetParent(transform);
     }
 
     private void Start()

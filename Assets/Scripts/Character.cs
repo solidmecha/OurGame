@@ -12,6 +12,7 @@ public class Character : MonoBehaviour {
     public int[] Regen = new int[4];
     public int[] Current_Resource = new int[4];
     public int[] Max_Resource = new int[4];
+    public int Level;
 
     public List<Skill> SkillSet = new List<Skill> { };
     public List<Status> Statuses = new List<Status> { };

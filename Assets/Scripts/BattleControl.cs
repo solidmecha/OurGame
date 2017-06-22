@@ -23,6 +23,7 @@ public class BattleControl : MonoBehaviour {
     public GameObject BackgroundPrefab;
     public GameObject PortraitPrefab;
     public GameObject EnemyPrefab;
+    public GameObject Message;
     
     public void HandleBattle()
     {
@@ -137,8 +138,9 @@ public class BattleControl : MonoBehaviour {
         }
         else if (Party[TurnIndex].SkillSet[i].skillType == 4)
         {
-            foreach (Character C in EnemyParty)
-                CastSkillOnTarget(Party[TurnIndex], C);
+            for(int j=0;j<EnemyParty.Count;j++)
+                if(EnemyParty[j].health>0)
+                    CastSkillOnTarget(Party[TurnIndex], EnemyParty[j]);
             NextTurn();
         }
     }
@@ -283,9 +285,25 @@ public class BattleControl : MonoBehaviour {
         }
         if (isLost)
         {
-            print("Party was Victorious!!!");
-            CleanUpBattle();
+            GenerateRewards();
         }
+    }
+
+     void GenerateRewards()
+    {
+        int gold=0;
+        int xp=0;
+        foreach(Character E in EnemyParty)
+        {
+            gold+=E.GetComponent<EnemyLogic>().Gold;
+            xp+= E.GetComponent<EnemyLogic>().Xp;
+        }
+
+        WC.UpdateCurrency(gold, xp);
+        string S = "The party gained " + gold.ToString()+" gold and "+xp.ToString() + " XP!";
+        WC.CurrentNode.GetComponent<EncounterScript>().SetMessageText(S);
+        CleanUpBattle();
+
     }
 
     void CleanUpBattle()

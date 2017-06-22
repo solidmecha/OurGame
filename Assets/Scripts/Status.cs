@@ -132,7 +132,7 @@ public class Status {
                 mods[i] = ArrayModifiers[i] / totalMods;
                 Dmg += ((Attacker.Attack[i] *Attacker.Attack[i]) / (4f*C.Defence[i] + 100f)) * BaseValue * mods[i];
             }
-            MonoBehaviour.print("Will dmg " +Dmg);
+            MonoBehaviour.print("DoT dmg " +Dmg);
         }
         else //healing
         {           
@@ -250,6 +250,27 @@ public class Status {
         RollStatus(C);
     }
 
+    public void OverloadAction(Character C)
+    {
+        if (duration == BaseValue)
+        {
+            foreach (Skill S in C.SkillSet)
+            {
+                Skill s = new Skill(S.Name, S.EffectText, S.BaseDamage, S.Costs, S.levelReq, S.skillType);
+                skillSet.Add(s);
+                if (S.skillType == 0)
+                    S.skillType = 4;
+            }
+        }
+        if(duration==1)
+        {
+            C.SkillSet.Clear();
+            foreach (Skill S in skillSet)
+                C.SkillSet.Add(S);
+        }
+        duration--;
+    }
+
     public void WheelOfFateAction(Character C)
     {
         
@@ -352,7 +373,10 @@ public class Status {
                 Status Melted = new Status(21, "Melted", new int[4] { 0, 0, -2, 0 }, Stat_Target_type.Regen, Status_Behavior.OneTime, 4, 4);
                 Melted.action = Melted.RollStatus;
                 return Melted;
-
+            case 22:
+                Status Overloaded = new Status(22, "Overloaded", Status_Behavior.DoT, 2, 2);
+                Overloaded.action = Overloaded.OverloadAction;
+                return Overloaded;
             default:
                 Status Safe = new Status();
                 return Safe;
@@ -378,6 +402,8 @@ public class Status {
                 return DecimateAction;
             case 19:
                 return WispAction;
+            case 22:
+                return OverloadAction;
 
             default:
                 return RollStatus;

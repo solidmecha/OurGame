@@ -78,12 +78,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\AcademyScript.cs" />
     <Compile Include="Assets\Scripts\BattleControl.cs" />
     <Compile Include="Assets\Scripts\Character.cs" />
     <Compile Include="Assets\Scripts\EncounterScript.cs" />
     <Compile Include="Assets\Scripts\EnemyLogic.cs" />
     <Compile Include="Assets\Scripts\ShopScript.cs" />
     <Compile Include="Assets\Scripts\ShopSelectCharacter.cs" />
+    <Compile Include="Assets\Scripts\ShowPriceHelper.cs" />
     <Compile Include="Assets\Scripts\ShowStatusOnHover.cs" />
     <Compile Include="Assets\Scripts\Skill.cs" />
     <Compile Include="Assets\Scripts\Status.cs" />

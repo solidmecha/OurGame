@@ -44,11 +44,22 @@ public class ShopScript : MonoBehaviour {
             }
             int t = i;
             go.GetComponent<Button>().onClick.AddListener(delegate { BuySkill(t); });
-            go.GetComponent<Button>().interactable = (checkMaxRes(SkillsForSale[i]) && !hasSkill(SkillsForSale[i]));
+            go.GetComponent<Button>().interactable = (checkMaxRes(SkillsForSale[i]) && !hasSkill(SkillsForSale[i]) && SkillsForSale[i].levelReq<=WC.Gold);
+            go.AddComponent<ShowPriceHelper>().id=t;
             CurrentSkillButtons.Add(go);
 
         }
 
+    }
+
+    public void ShowCost(int i)
+    {
+        CurrentUI_Canvas.transform.GetChild(10).GetComponent<Text>().text = "Price: $" + SkillsForSale[i].levelReq.ToString();
+    }
+
+    public void ClearCost()
+    {
+        CurrentUI_Canvas.transform.GetChild(10).GetComponent<Text>().text = "";
     }
 
     void DisplayCharSkills()
@@ -172,6 +183,7 @@ public class ShopScript : MonoBehaviour {
         WC.CurrentParty[SelectedCharIndex].GetComponent<Character>().SkillSet.Add(SkillsForSale[index]);
         while (WC.CurrentParty[SelectedCharIndex].GetComponent<Character>().SkillSet.Count > 6 + CharacterSkillIndex)
             NextCharacterSkillPage();
+        WC.UpdateCurrency(-1 * SkillsForSale[index].levelReq, 0);
         DisplayCharSkills();
         DisplayShopSkills();
     }
@@ -179,8 +191,8 @@ public class ShopScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         WC = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldControl>();
-        WC.InEncounter = true;
-        for (int i = 0; i < 36; i++)
+
+        for (int i = 0; i < 42; i++)
             SkillsForSale.Add(Skill.searchID(i));
 
         CurrentPortrait = Instantiate(CurrentPortrait, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;

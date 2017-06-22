@@ -7,6 +7,8 @@ public class EnemyLogic : MonoBehaviour {
 
     public BattleControl BC;
     Character ThisChar;
+    public int Gold;
+    public int Xp;
     System.Random RNG = new System.Random();
 
     public void chooseSkill()
@@ -97,6 +99,8 @@ public class EnemyLogic : MonoBehaviour {
         {
             ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(35)));
         }
+        Gold = BC.WC.RNG.Next(10, 26);
+        Xp = BC.WC.RNG.Next(4, 10);
     }
 
 	// Use this for initialization

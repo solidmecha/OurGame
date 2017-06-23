@@ -90,6 +90,7 @@
     <Compile Include="Assets\Scripts\Skill.cs" />
     <Compile Include="Assets\Scripts\Status.cs" />
     <Compile Include="Assets\Scripts\TargetSelectScript.cs" />
+    <Compile Include="Assets\Scripts\UpgradeScript.cs" />
     <Compile Include="Assets\Scripts\WorldControl.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

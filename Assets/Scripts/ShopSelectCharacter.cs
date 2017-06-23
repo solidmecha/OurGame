@@ -1,13 +1,15 @@
 ﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShopSelectCharacter : MonoBehaviour {
 
     public int Index;
+    public Action<int> action;
 
     private void OnMouseDown()
     {
-        transform.root.GetComponent<ShopScript>().SetSelectedChar(Index);
+        action(Index);
     }
 }

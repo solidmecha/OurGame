@@ -210,6 +210,7 @@ public class ShopScript : MonoBehaviour {
             GameObject G=Instantiate(ShopCharacter, transform.GetChild(1 + i).position, Quaternion.identity) as GameObject;
             G.transform.SetParent(transform);
             G.GetComponent<ShopSelectCharacter>().Index = i;
+            G.GetComponent<ShopSelectCharacter>().action = SetSelectedChar;
             G.GetComponent<SpriteRenderer>().sprite = WC.CurrentParty[i].GetComponent<SpriteRenderer>().sprite;
         }
         SetSelectedChar(0);

@@ -192,7 +192,7 @@ public class ShopScript : MonoBehaviour {
     void Start () {
         WC = GameObject.FindGameObjectWithTag("GameController").GetComponent<WorldControl>();
 
-        for (int i = 0; i < 42; i++)
+        for (int i = 0; i < Skill.TotalSkillCount; i++)
             SkillsForSale.Add(Skill.searchID(i));
 
         CurrentPortrait = Instantiate(CurrentPortrait, new Vector2(-5.9f, -2.29f), Quaternion.identity) as GameObject;

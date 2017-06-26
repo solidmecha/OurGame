@@ -87,6 +87,7 @@
     <Compile Include="Assets\Scripts\ShopSelectCharacter.cs" />
     <Compile Include="Assets\Scripts\ShowPriceHelper.cs" />
     <Compile Include="Assets\Scripts\ShowStatusOnHover.cs" />
+    <Compile Include="Assets\Scripts\ShowUpgradeCostHelper.cs" />
     <Compile Include="Assets\Scripts\Skill.cs" />
     <Compile Include="Assets\Scripts\Status.cs" />
     <Compile Include="Assets\Scripts\TargetSelectScript.cs" />

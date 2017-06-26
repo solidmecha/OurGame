@@ -13,6 +13,8 @@ public class Skill {
     public int levelReq;
     public int skillType; //0= single target, 1=self target, 2=Party target, 3=all allies, 4=all enemies
 
+    public static int TotalSkillCount=70;
+
 
     public Skill() { }
 
@@ -131,15 +133,15 @@ public class Skill {
 
             case 0:
                 costs = new int[4] { -1, 0, 0, 0 };
-                Skill BasicAttack = new Skill("Basic Attack", "basically attacks them", 15, costs, 25,0);
+                Skill BasicAttack = new Skill("Basic Attack", "basically attacks them", 25, costs, 25,0);
                 return BasicAttack;
             case 1:
                 costs = new int[4] { 0, -1, 0, 0 };
-                Skill MagmaJet = new Skill("Magma Jet", "The Pyromancer's first lesson", 15, costs, 25, 0);
+                Skill MagmaJet = new Skill("Magma Jet", "The Pyromancer's first lesson", 25, costs, 25, 0);
                 return MagmaJet;
             case 2:
                 costs = new int[4] { 0, 0, -1, 0 };
-                Skill IceNeedle = new Skill("Ice Needle", "A simple, cold thread", 15, costs, 25, 0);
+                Skill IceNeedle = new Skill("Ice Needle", "A simple, cold thread", 25, costs, 25, 0);
                 return IceNeedle;
             case 3:
                 costs = new int[4] {0,0,0,-2};
@@ -150,7 +152,7 @@ public class Skill {
                 Debuffs.Add(Status.StatusByID(0));//poison
                 Debuffs.Add(Status.StatusByID(2));//burn
                 Buffs.Add(Status.StatusByID(1));//genFire
-                Skill VenomFlame=new Skill("Venom Flame", "Generates Chi while poisoning and burning enemy", 0, costs, Debuffs, Buffs, 50, 0);
+                Skill VenomFlame=new Skill("Venom Flame", "Generates Chi while poisoning and burning enemy", 50, costs, Debuffs, Buffs, 50, 0);
                 return VenomFlame;
             case 5:
                 costs = new int[4] {9,13,0,0};
@@ -158,16 +160,16 @@ public class Skill {
                 Buffs.Add(Status.StatusByID(2)); //burn
                 Buffs.Add(Status.StatusByID(4)); //fireAtk+
                 Buffs.Add(Status.StatusByID(5)); //fireDef+
-                Skill LivingInferno = new Skill("Living Inferno", "Become the flame", 0, costs, Debuffs, Buffs, 100, 1);
+                Skill LivingInferno = new Skill("Living Inferno", "Become the flame", 20, costs, Debuffs, Buffs, 100, 1);
                 return LivingInferno;
             case 6:
                 costs = new int[4] { 0, 0, 7, 7 };
                 Debuffs.Add(Status.StatusByID(3)); //heal
-                Skill HealingWind = new Skill("Healing Wind", "heal over time on party", 0, costs, Debuffs, Buffs, 75, 3);
+                Skill HealingWind = new Skill("Healing Wind", "heal over time on party", -10, costs, Debuffs, Buffs, 75, 3);
                 return HealingWind;
             case 7:
                 costs = new int[4] { 2, 1, 0, 0 };
-                Skill Smash = new Skill("Smash", "smash", 25, costs, Debuffs, Buffs, 75, 0);
+                Skill Smash = new Skill("Smash", "smash", 45, costs, Debuffs, Buffs, 75, 0);
                 return Smash;
             case 8:
                 costs = new int[4] { 10, 8, 0, 0 };
@@ -193,12 +195,12 @@ public class Skill {
             case 12:
                 costs = new int[4] {6,0,0,0};
                 Debuffs.Add(Status.StatusByID(10));//phys def lowered
-                Skill Claw = new Skill("Claw", "scratch", 45, costs, Debuffs, Buffs, 180, 0);
+                Skill Claw = new Skill("Claw", "scratch", 55, costs, Debuffs, Buffs, 180, 0);
                 return Claw;
             case 13:
                 costs = new int[4] { 8, 0, 0, 0 };
                 Buffs.Add(Status.StatusByID(10));//phys def lowered
-                Skill Bite = new Skill("Bite", "Om nom nom", 65, costs, Debuffs, Buffs, 180, 0);
+                Skill Bite = new Skill("Bite", "Om nom nom", 125, costs, Debuffs, Buffs, 180, 0);
                 return Bite;
             case 14:
                 costs = new int[4] { -2, 0, 0, 0 };
@@ -207,20 +209,20 @@ public class Skill {
                 return HumanForm;
             case 15:
                 costs = new int[4] {2,3,3,1};
-                Skill MagicMissle = new Skill("Magic Missle", "A litte bit of everything", 35, costs, 75, 0);
+                Skill MagicMissle = new Skill("Magic Missle", "A litte bit of everything", 55, costs, 75, 0);
                 return MagicMissle;
             case 16:
                 costs = new int[4] {5,5,5,5};
-                Skill Comet = new Skill("Comet", "It's highly eccentric", 60, costs, 200, 0);
+                Skill Comet = new Skill("Comet", "It's highly eccentric", 90, costs, 200, 0);
                 return Comet;
             case 17:
                 costs = new int[4] { 0, 12, 0, 0 };
-                Skill Fireball = new Skill("Fireball", "It's quite warm", 60, costs, 200, 0);
+                Skill Fireball = new Skill("Fireball", "It's quite warm", 90, costs, 200, 0);
                 return Fireball;
             case 18:
                 costs = new int[4] { 5, 7, 0, 0 };
                 Buffs.Add(Status.StatusByID(3));//heal
-                Skill Syphon = new Skill("Syphon", "Attack while healing", 30, costs, Debuffs, Buffs, 125, 0);
+                Skill Syphon = new Skill("Syphon", "Attack while healing", 50, costs, Debuffs, Buffs, 125, 0);
                 return Syphon;
             case 19:
                 costs = new int[4] {3,0,0,0};
@@ -229,7 +231,7 @@ public class Skill {
                 return Block;
             case 20:
                 costs = new int[4] {20,20,20,0};
-                Skill Ultima = new Skill("Ultima", "The ultimate magic", 500, costs, 500, 0);
+                Skill Ultima = new Skill("Ultima", "The ultimate magic", 1000, costs, 500, 0);
                 return Ultima;
             case 21:
                 costs = new int[4] {3,3,3,0};
@@ -241,12 +243,12 @@ public class Skill {
             case 22:
                 costs = new int[4] { 0, 0, 6, 0 };
                 Debuffs.Add(Status.StatusByID(15));
-                Skill Blizzard = new Skill("Blizzard", "Snowstorm", 45, costs, Debuffs, Buffs, 125, 0);
+                Skill Blizzard = new Skill("Blizzard", "Snowstorm", 55, costs, Debuffs, Buffs, 125, 0);
                 return Blizzard;
             case 23:
                 costs = new int[4] {0,0,10,0};
                 Debuffs.Add(Status.StatusByID(16));
-                Skill Avalanche = new Skill("Avalance", "Reduce their stamina", 55, costs, Debuffs, Buffs, 300, 0);
+                Skill Avalanche = new Skill("Avalance", "Reduce their stamina", 75, costs, Debuffs, Buffs, 300, 0);
                 return Avalanche;
             case 24:
                 costs = new int[4] { 0, 0, 14, 0 };
@@ -272,25 +274,25 @@ public class Skill {
             case 28:
                 costs = new int[4] { 0, 5, 0, 0 };
                 Debuffs.Add(Status.StatusByID(21));
-                Skill melt = new Skill("Melt", "Lower Ice Attack and Regen", 35, costs, 45, 0);
+                Skill melt = new Skill("Melt", "Lower Ice Attack and Regen", 45, costs, 45, 0);
                 return melt;
             case 29:
                 costs = new int[4] {3, 0,0,0};
                 Debuffs.Add(Status.StatusByID(0));
-                Skill Plague = new Skill("Plague dart", "poison", 20, costs, Debuffs, Buffs, 40, 0);
+                Skill Plague = new Skill("Plague dart", "poison", 40, costs, Debuffs, Buffs, 40, 0);
                 return Plague;
             case 30:
                 costs = new int[4] { 3, 0, 5, 0 };
                 Buffs.Add(Status.StatusByID(13));
-                Skill MeditativeStrike = new Skill("Meditative Strike", "Strike and raise all attack", 25, costs, Debuffs, Buffs, 150, 0);
+                Skill MeditativeStrike = new Skill("Meditative Strike", "Strike and raise all attack", 35, costs, Debuffs, Buffs, 150, 0);
                 return MeditativeStrike;
             case 31:
                 costs = new int[4] { 6, 0, 0, 10 };
-                Skill Earthquake = new Skill("Earthquake", "The ground trembles", 45, costs, 120, 4);
+                Skill Earthquake = new Skill("Earthquake", "The ground trembles", 65, costs, 120, 4);
                 return Earthquake;
             case 32:
                 costs = new int[4] { 9, 5, 0, 0 };
-                Skill Fissure = new Skill("Fissure", "The ground opens beneath them", 55, costs, 100, 0);
+                Skill Fissure = new Skill("Fissure", "The ground opens beneath them", 85, costs, 100, 0);
                 return Fissure;
             case 33:
                 costs = new int[4] { 0, 0, 20, 0 };
@@ -306,7 +308,7 @@ public class Skill {
             case 34:
                 costs = new int[4] { 3,0,4,0};
                 Buffs.Add(Status.StatusByID(1));
-                Skill GhostFire = new Skill("Ghost Fire", "Generate fire", 20, costs, Debuffs, Buffs, 75, 0);
+                Skill GhostFire = new Skill("Ghost Fire", "Generate fire", 40, costs, Debuffs, Buffs, 75, 0);
                 return GhostFire;
             case 35:
                 costs = new int[4] {0,0,0,15};
@@ -317,6 +319,38 @@ public class Skill {
                 Buffs.Add(Status.StatusByID(22));
                 Skill Overload = new Skill("Overload", "Turn skills into AoE", 0, costs, Debuffs, Buffs, 150, 1);
                 return Overload;
+            case 37:
+                costs = new int[4] { 1, 1, 1, 3 };
+                Debuffs.Add(Status.StatusByID(23));
+                Skill Doubletime = new Skill("Time Walk", "Take extra turns", 0, costs, Debuffs, Buffs, 600, 2);
+                return Doubletime;
+            case 38:
+                costs = new int[4] { 0, 0, 9, 0 };
+                Debuffs.Add(Status.StatusByID(24));
+                Skill Discombobulate = new Skill("Discombobulate", "I said mess with his brain not cut off his head", 0, costs, Debuffs, Buffs, 400, 0);
+                return Discombobulate;
+            case 39:
+                costs = new int[4] { -1, 0, 0, 0 };
+                Debuffs.Add(Status.StatusByID(25));
+                Skill Confusion = new Skill("Confusion", "You're confused", 0, costs, Debuffs, Buffs, 0, 1);
+                return Confusion;
+            case 40:
+                costs = new int[4] { 16,8,0,8};
+                Debuffs.Add(Status.StatusByID(26));
+                Skill Wreckoning = new Skill("Reckoning", "Massive AoE and Defenses lowered", 500, costs, Debuffs, Buffs, 500, 4);
+                return Wreckoning;
+            case 41:
+                costs = new int[4] { 0, 0, 7, 2 };
+                Debuffs.Add(Status.StatusByID(27));
+                Skill WheelOfFate = new Skill("Wheel of Fate", "Randomly adds Debuffs", 0, costs, Debuffs, Buffs, 250, 0);
+                return WheelOfFate;
+            case 42:
+                costs = new int[4] { -1, -1, -1, -1 };
+                Buffs.Add(Status.StatusByID(28));
+                Skill UnknownWish = new Skill("UnknownWish", "Randomly gain new skill", 0, costs, Debuffs, Buffs, 300, 1);
+                return UnknownWish;
+
+            
 
             default:
                 costs = new int[4] { 1, 0, 0, 0 };

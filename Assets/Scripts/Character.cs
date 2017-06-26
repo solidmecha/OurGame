@@ -76,6 +76,7 @@ public class Character : MonoBehaviour {
             if(Statuses[i].duration==0)
             {
                 Statuses.RemoveAt(i);
+                i--;
             }
         }
 

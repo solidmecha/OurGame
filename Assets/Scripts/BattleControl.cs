@@ -28,6 +28,7 @@ public class BattleControl : MonoBehaviour {
     public void HandleBattle()
     {
         WC.MoveMap();
+        WC.BattleCount++;
         Background=Instantiate(BackgroundPrefab, Vector2.zero, Quaternion.identity);
         int R = WC.RNG.Next(1, 7);
         for(int i=0;i<R;i++)
@@ -150,14 +151,20 @@ public class BattleControl : MonoBehaviour {
         CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text = "Select Target";
         foreach (Character C in EnemyParty)
         {
-           TargetSelectScript tss= C.gameObject.AddComponent<TargetSelectScript>();
-            tss.BC = this;
+            if (C.gameObject.GetComponent<TargetSelectScript>() == null)
+            {
+                TargetSelectScript tss = C.gameObject.AddComponent<TargetSelectScript>();
+                tss.BC = this;
+            }
         }
 
         foreach (Character C in Party)
         {
-            TargetSelectScript tss = C.gameObject.AddComponent<TargetSelectScript>();
-            tss.BC = this;
+            if (C.gameObject.GetComponent<TargetSelectScript>() == null)
+            {
+                TargetSelectScript tss = C.gameObject.AddComponent<TargetSelectScript>();
+                tss.BC = this;
+            }
         }
     }
 

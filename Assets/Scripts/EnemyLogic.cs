@@ -51,7 +51,7 @@ public class EnemyLogic : MonoBehaviour {
             }
             int r= RNG.Next(tempCharList.Count);
             S.fight(ThisChar, tempCharList[r]);
-            BC.CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text += "On "+ tempCharList[r].name;
+            BC.CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text += " On "+ tempCharList[r].name;
         }
         else if(S.skillType==1)
         {
@@ -67,7 +67,7 @@ public class EnemyLogic : MonoBehaviour {
             }
             int r = RNG.Next(tempCharList.Count);
             S.fight(ThisChar, tempCharList[r]);
-            BC.CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text += "On" + tempCharList[r].name;
+            BC.CurrentUI_Canvas.transform.GetChild(8).GetComponent<Text>().text += " On" + tempCharList[r].name;
         }
         else if(S.skillType==3)
         {
@@ -90,17 +90,33 @@ public class EnemyLogic : MonoBehaviour {
 
     public void GenerateEnemy()
     {
-        int h= BC.WC.RNG.Next(750, 2500);
+        int h= BC.WC.RNG.Next(20+BC.WC.BattleCount*10, 50+BC.WC.BattleCount * 10);
         ThisChar.health = h;
         ThisChar.MaxHealth = h;
         int N = BC.WC.RNG.Next(4, 9);
+
+        for (int i = 0; i < 4; i++)
+        {
+            ThisChar.Regen[i] += BC.WC.RNG.Next((int)Mathf.Sqrt(BC.WC.BattleCount));
+            ThisChar.Attack[i] += BC.WC.RNG.Next(1+BC.WC.BattleCount/2, BC.WC.BattleCount);
+            ThisChar.Defence[i] += BC.WC.RNG.Next(BC.WC.BattleCount+50);
+
+        }
+
         ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(3)));
+
+        //test enemy skills here
+        /*
+        ThisChar.SkillSet.Add(Skill.searchID(41));
+        ThisChar.Regen[2] = 7;
+        */
+
         for (int i=0; i<N;i++)
         {
-            ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(35)));
+            ThisChar.SkillSet.Add(Skill.searchID(RNG.Next(42)));
         }
-        Gold = BC.WC.RNG.Next(10, 26);
-        Xp = BC.WC.RNG.Next(4, 10);
+        Gold = BC.WC.RNG.Next(10+BC.WC.BattleCount*3, 26 + BC.WC.BattleCount * 5);
+        Xp = BC.WC.RNG.Next(4 + BC.WC.BattleCount * 2, 10+BC.WC.BattleCount * 6);
     }
 
 	// Use this for initialization

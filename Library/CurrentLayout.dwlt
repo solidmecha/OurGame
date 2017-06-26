@@ -255,19 +255,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Art
+    - Assets/Scripts
   m_ViewMode: 1
-  m_StartGridSize: 39
+  m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Art
-  m_LastFoldersGridSize: 39
+  - Assets/Scripts
+  m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\Kevin\Documents\UNITY_PROJECTS\OurGame
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 02250000
-    m_LastClickedID: 9474
-    m_ExpandedIDs: 00000000c62400008e2500003829000000ca9a3bffffff7f
+    m_SelectedIDs: 72260000
+    m_LastClickedID: 9842
+    m_ExpandedIDs: 00000000ca240000922500004629000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -295,7 +295,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000c62400008e25000038290000
+    m_ExpandedIDs: 00000000ca2400009225000046290000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -320,24 +320,24 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: caa5fcff
-    m_LastClickedInstanceID: -219702
-    m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: 6023000028230000123d0000e045000088250000a46fffffbc3c0000e4250000
+    m_SelectedInstanceIDs: a63ff5ff
+    m_LastClickedInstanceID: -704602
+    m_HadKeyboardFocusLastEvent: 0
+    m_ExpandedInstanceIDs: 6023000028230000123d0000e045000088250000a46fffffbc3c0000e4250000e8250000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: UpgradeScript
+      m_OriginalName: UpgradeScript
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 34398
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 3}
     m_CreateAssetUtility:
@@ -347,8 +347,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 301.5}
-    m_GridSize: 39
+    m_ScrollPosition: {x: 0, y: 0}
+    m_GridSize: 16
   m_DirectoriesAreaWidth: 110
 --- !u!114 &11
 MonoBehaviour:
@@ -376,7 +376,7 @@ MonoBehaviour:
     y: 92
     width: 275
     height: 614
-  m_ScrollPosition: {x: 0, y: 11.955078}
+  m_ScrollPosition: {x: 0, y: 0}
   m_InspectorMode: 0
   m_PreviewResizer:
     m_CachedPref: 100
@@ -411,23 +411,23 @@ MonoBehaviour:
     height: 614
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 90260000
-    m_LastClickedID: 9872
-    m_ExpandedIDs: e0fbffff00000000d8260000
+    m_SelectedIDs: 5e09fdff
+    m_LastClickedID: -194210
+    m_ExpandedIDs: 0a6cf3ff3ea3f4ff54a3f4ff6aa3f4ff80a3f4ff96a3f4ffaca3f4ffd8a3f4ffeea3f4ff04a4f4ff1aa4f4ff30a4f4ff46a4f4ffe0bef4ff16daf4ffd0daf4ff24dbf4ffaedcf4ff62ddf4ff90e0f4ff0ae2f4ffcce2f4ff58f7f4ff12f8f4ffbef8f4ff6a1df5ffce3ef5ffda3ef5ffe03ef5ffe63ef5ffec3ef5fffe3ef5ffa43ff5ffa63ff5ffc64ef5ff5056f5ff8456f5ff8656f5ff141ef6ff161ef6ff6093f6ff6293f6ff40fafcff46fafcffa84dfdffca58fdff0c5afdff645bfdfff044feff0845feff0a45feff7e91feff86abfeff88abfeffeaf7feff6e13ffffe0fbffff0000000092260000da260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: HPbar
+      m_OriginalName: HPbar
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: -704818
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 4}
     m_SearchString: 
@@ -463,14 +463,14 @@ MonoBehaviour:
     width: 835
     height: 614
   m_SceneLighting: 0
-  lastFramingTime: 123203.35503259917
+  lastFramingTime: 138084.7167435132
   m_2DMode: 1
   m_isRotationLocked: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.12160393, y: -0.92263436, z: -0.44921875}
+    m_Target: {x: 3.23662, y: -1.2180419, z: -1}
     speed: 2
-    m_Value: {x: -0.12160393, y: -0.92263436, z: -0.44921875}
+    m_Value: {x: 3.23662, y: -1.2180419, z: -1}
   m_RenderMode: 0
   m_ValidateTrueMetals: 0
   m_SceneViewState:
@@ -497,9 +497,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 8.205534
+    m_Target: 12.984279
     speed: 2
-    m_Value: 8.205534
+    m_Value: 12.984279
   m_Ortho:
     m_Target: 1
     speed: 2

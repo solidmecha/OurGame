@@ -17,6 +17,7 @@ public class WorldControl : MonoBehaviour {
     public Text GoldText;
     public Text XpText;
     public GameObject CurrentNode;
+    public int BattleCount;
 
     public void MoveMap()
     {
@@ -41,8 +42,16 @@ public class WorldControl : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
         UpdateCurrency(999,99);
-	}
+       for(int i=0;i<4;i++)
+        {
+            CurrentParty[i].GetComponent<Character>().SkillSet.Add(Skill.searchID(0));
+            CurrentParty[i].GetComponent<Character>().SkillSet.Add(Skill.searchID(41));
+        }
+
+    }
 	
 	// Update is called once per frame
 	void Update () {

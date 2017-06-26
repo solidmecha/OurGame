@@ -18,6 +18,7 @@ public class Status {
     public List<Skill> skillSet=new List<Skill> { }; //when needed
     public Character Attacker;
     public string InflictingSkillName;
+    public int TotalStatusCount = 27;
 
     public Status() { }
 
@@ -250,6 +251,56 @@ public class Status {
         RollStatus(C);
     }
 
+    public void DoubleTimeAction(Character C)
+    {
+        if(duration%2==0)
+            GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleControl>().TurnIndex--;
+        duration--;
+    }
+
+    public void ConfuseTargetAction(Character C)
+    {
+        if(duration==BaseValue)
+        {
+            foreach (Skill S in C.SkillSet)
+                skillSet.Add(S);
+            C.SkillSet.Clear();
+            C.SkillSet.Add(Skill.searchID(39));
+            foreach (Skill S in skillSet)
+                C.SkillSet[0].DebuffList[0].skillSet.Add(S);
+        }
+        if(duration==1)
+        {
+            C.SkillSet.Clear();
+            foreach (Skill S in skillSet)
+                C.SkillSet.Add(S);
+        }
+        duration--;
+    }
+
+    public void UseRandomSkilRandomly(Character C)
+    {
+        List<int> TempInts = new List<int> { };
+        for(int i=0;i<skillSet.Count;i++)
+        {
+            if (C.hasResources(skillSet[i].Costs))
+                TempInts.Add(i);
+        }
+
+        System.Random rng = new System.Random();
+        int r = rng.Next(TempInts.Count);
+        BattleControl BC = GameObject.FindGameObjectWithTag("GameController").GetComponent<BattleControl>();
+        List<Character> targets = new List<Character> { };
+        foreach (Character p in BC.Party)
+            targets.Add(p);
+        foreach (Character e in BC.EnemyParty)
+            targets.Add(e);
+        int t = rng.Next(targets.Count);
+        skillSet[r].fight(C, targets[t]);
+        MonoBehaviour.print("In Confusion, " + skillSet[r].Name + " " + targets[t].name);
+        duration--;
+    }
+
     public void OverloadAction(Character C)
     {
         if (duration == BaseValue)
@@ -273,7 +324,27 @@ public class Status {
 
     public void WheelOfFateAction(Character C)
     {
-        
+        System.Random rng = new System.Random();
+        int r;
+        List<int> StatusesThatCrashGame = new List<int> {12,25 };
+        do
+        {
+            r = rng.Next(TotalStatusCount);
+        }
+        while (StatusesThatCrashGame.Contains(r));
+        Status S = StatusByID(r);
+        S.Attacker = Attacker;
+        S.InflictingSkillName = InflictingSkillName;
+        C.Statuses.Add(S);
+        duration--;
+    }
+
+    public void WishAction(Character C)
+    {
+        System.Random rng = new System.Random();
+        int r=rng.Next(Skill.TotalSkillCount);
+        C.SkillSet.Add(Skill.searchID(r));
+        duration--;
     }
 
     public void SetAction()
@@ -331,11 +402,11 @@ public class Status {
                 return DropPhysDef;
             case 11:
                 Status WolfTransform = new Status(11, "werewolf", Status_Behavior.Unique, 1, 1);
-               // WolfTransform.action = WolfTransform.WolfForm;
+                WolfTransform.action = WolfTransform.WolfForm;
                 return WolfTransform;
             case 12:
                 Status HumanTransform = new Status(12, "human", Status_Behavior.Unique, 1, 1);
-               // HumanTransform.action = HumanTransform.HumanForm;
+                HumanTransform.action = HumanTransform.HumanForm;
                 return HumanTransform;
             case 13:
                 Status BuffAllAtk = new Status(13, "+All Atk", new int[4] {6,6,6,6}, Stat_Target_type.Attack, Status_Behavior.OneTime, 4, 4);
@@ -377,6 +448,31 @@ public class Status {
                 Status Overloaded = new Status(22, "Overloaded", Status_Behavior.DoT, 2, 2);
                 Overloaded.action = Overloaded.OverloadAction;
                 return Overloaded;
+            case 23:
+                Status DoubleTimed = new Status(23, "DoubleTimed", Status_Behavior.DoT, 4, 4);
+                DoubleTimed.action = DoubleTimed.DoubleTimeAction;
+                return DoubleTimed;
+            case 24:
+                Status Confused = new Status(24, "Confused", Status_Behavior.Unique, 3, 3);
+                Confused.action = Confused.ConfuseTargetAction;
+                return Confused;
+            case 25:
+                Status ConfusedandAttacking = new Status(25, "Attacking while Confused", Status_Behavior.DoT, 1, 1);
+                ConfusedandAttacking.action = ConfusedandAttacking.UseRandomSkilRandomly;
+                return ConfusedandAttacking;
+            case 26:
+                Status DefenseShred = new Status(26, "Lower Defense", new int[4] { -25, -25, -25, -50 }, Stat_Target_type.Defence, Status_Behavior.OneTime, 6, 6);
+                DefenseShred.action = DefenseShred.RollStatus;
+                return DefenseShred;
+            case 27:
+                Status Wheel = new Status(27, "Wheel of Fate", Status_Behavior.Unique, 6, 6);
+                Wheel.action = Wheel.WheelOfFateAction;
+                return Wheel;
+            case 28:
+                Status Wish = new Status(28, "Wishing", Status_Behavior.DoT, 1, 1);
+                Wish.action = Wish.WishAction;
+                return Wish;
+
             default:
                 Status Safe = new Status();
                 return Safe;
@@ -404,6 +500,16 @@ public class Status {
                 return WispAction;
             case 22:
                 return OverloadAction;
+            case 23:
+                return DoubleTimeAction;
+            case 24:
+                return ConfuseTargetAction;
+            case 25:
+                return UseRandomSkilRandomly;
+            case 27:
+                return WheelOfFateAction;
+            case 28:
+                return WishAction;
 
             default:
                 return RollStatus;
